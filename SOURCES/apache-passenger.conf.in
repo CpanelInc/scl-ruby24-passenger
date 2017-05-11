@@ -1,0 +1,8 @@
+LoadModule passenger_module @PASSENGERSO@
+<IfModule mod_passenger.c>
+   PassengerRoot @PASSENGERROOT@
+   PassengerEnabled off
+   PassengerDefaultRuby @PASSENGERDEFAULTRUBY@
+   PassengerDisableSecurityUpdateCheck on
+   PassengerInstanceRegistryDir @PASSENGERINSTANCEDIR@
+</IfModule>
