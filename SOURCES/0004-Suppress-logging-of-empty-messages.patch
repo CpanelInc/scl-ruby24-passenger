@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Rishwanth Yeddula <rish@cpanel.net>
+Date: Wed, 19 Apr 2017 17:24:55 -0500
+Subject: [PATCH 4/5] Suppress logging of empty messages
+
+---
+ src/cxx_supportlib/Logging.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cxx_supportlib/Logging.cpp b/src/cxx_supportlib/Logging.cpp
+index f90aa34ae..da9b3e268 100644
+--- a/src/cxx_supportlib/Logging.cpp
++++ b/src/cxx_supportlib/Logging.cpp
+@@ -256,7 +256,7 @@ void
+ printAppOutput(pid_t pid, const char *channelName, const char *message, unsigned int size) {
+ 	if (printAppOutputAsDebuggingMessages) {
+ 		P_DEBUG("App " << pid << " " << channelName << ": " << StaticString(message, size));
+-	} else {
++	} else if (size > 0) {
+ 		char pidStr[sizeof("4294967295")];
+ 		unsigned int pidStrLen, channelNameLen, totalLen;
+ 
