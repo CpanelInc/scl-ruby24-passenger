@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 2
+%define release_prefix 3
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -93,7 +93,7 @@ Provides: bundled(boost) = %{bundled_boost_version}
 %{?filter_setup}
 
 %description
-Phusion Passenger® is a web server and application server, designed to be fast,
+Phusion Passenger(r) is a web server and application server, designed to be fast,
 robust and lightweight. It takes a lot of complexity out of deploying web apps,
 adds powerful enterprise-grade features that are useful in production,
 and makes administration much easier and less complex. It supports Ruby,
@@ -109,7 +109,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 License: Boost and BSD and BSD with advertising and MIT and zlib
 
 %description -n %{scl_prefix}mod_passenger
-This package contains the pluggable Apache server module for Phusion Passenger®.
+This package contains the pluggable Apache server module for Phusion Passenger(r).
 
 %package doc
 Summary: Phusion Passenger documentation
@@ -119,7 +119,7 @@ BuildArch: noarch
 License: CC-BY-SA and MIT and (MIT or GPL+)
 
 %description doc
-This package contains documentation files for Phusion Passenger®.
+This package contains documentation files for Phusion Passenger(r).
 
 %package -n %{?scl:%scl_prefix}ruby-wrapper
 Summary:   Phusion Passenger application server for %{scl_prefix}
@@ -319,6 +319,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Fri May 19 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-3
+- Replace the registered trademark symbols with plain ascii variant "(r)"
+
 * Tue May 16 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-2
 - Ensure the template quotes the values configured for the Passenger directives
 
