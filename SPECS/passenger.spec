@@ -20,12 +20,12 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 4
+%define release_prefix 5
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
 %global _httpd_modconfdir  %{_root_sysconfdir}/apache2/conf.modules.d
-%global _httpd_moddir      %{_libdir}/apache2/modules
+%global _httpd_moddir      %{_root_libdir}/apache2/modules
 
 Summary: Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
@@ -319,7 +319,10 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
-* Fri Jun 07 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-4
+* Thu Jun 08 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-5
+- Install mod_passenger.so into the system apache modules directory
+
+* Wed Jun 07 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-4
 - Ensure the wrapper script uses the full path to the "scl" binary
 
 * Fri May 19 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-3
