@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Rishwanth Yeddula <rish@cpanel.net>
+Date: Fri, 9 Jun 2017 20:56:19 -0500
+Subject: [PATCH 6/7] Disallow PassengerAppGroupName in .htaccess
+
+Limit the PassengerAppGroupName directive to just the RSRC_CONF and
+ACCESS_CONF contexts. This ensures that the directive is only valid
+if it is used in a .conf file.
+---
+ src/ruby_supportlib/phusion_passenger/apache2/config_options.rb | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/ruby_supportlib/phusion_passenger/apache2/config_options.rb b/src/ruby_supportlib/phusion_passenger/apache2/config_options.rb
+index 14c172b12..24fc06ac2 100644
+--- a/src/ruby_supportlib/phusion_passenger/apache2/config_options.rb
++++ b/src/ruby_supportlib/phusion_passenger/apache2/config_options.rb
+@@ -220,6 +220,7 @@
+   {
+     :name     => "PassengerAppGroupName",
+     :type     => :string,
++    :context  => ["ACCESS_CONF", "RSRC_CONF"],
+     :desc     => "Application process group name."
+   },
+   {
