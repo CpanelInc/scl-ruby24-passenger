@@ -20,12 +20,12 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 3
+%define release_prefix 7
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
 %global _httpd_modconfdir  %{_root_sysconfdir}/apache2/conf.modules.d
-%global _httpd_moddir      %{_libdir}/apache2/modules
+%global _httpd_moddir      %{_root_libdir}/apache2/modules
 
 Summary: Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
@@ -61,6 +61,11 @@ Patch2:         0003-Fix-the-path-for-passenger_native_support.patch
 Patch3:         0004-Suppress-logging-of-empty-messages.patch
 # Update the instance registry paths to include the SCL path
 Patch4:         0005-Add-the-instance-registry-path-for-the-ea-ruby24-SCL.patch
+# Disallow PassengerAppGroupName in .htaccess files
+Patch5:         0006-Disallow-PassengerAppGroupName-in-.htaccess.patch
+# Add a new directive to Passenger that will allow us to disallow
+# Passenger directives in .htaccess files
+Patch6:         0007-Add-new-PassengerDisableHtaccess-directive.patch
 
 BuildRequires: ea-apache24-devel
 BuildRequires: %{?scl:%scl_prefix}ruby
@@ -137,6 +142,8 @@ Phusion Passenger application server for %{scl_prefix}.
 %patch2 -p1 -b .nativelibdir
 %patch3 -p1 -b .emptymsglog
 %patch4 -p1 -b .instanceregpath
+%patch5 -p1 -b .disallowgroupname
+%patch6 -p1 -b .disablehtaccess
 
 # Don't use bundled libuv
 rm -rf src/cxx_supportlib/vendor-modified/libuv
@@ -319,6 +326,18 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Thu Jun 15 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-7
+- Add a new directive to Passenger: 'PassengerDisableHtaccess'
+
+* Fri Jun 09 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-6
+- Disallow PassengerAppGroupName in .htaccess files
+
+* Thu Jun 08 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-5
+- Install mod_passenger.so into the system apache modules directory
+
+* Wed Jun 07 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-4
+- Ensure the wrapper script uses the full path to the "scl" binary
+
 * Fri May 19 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-3
 - Replace the registered trademark symbols with plain ascii variant "(r)"
 
