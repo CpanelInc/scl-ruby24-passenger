@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 7
+%define release_prefix 1
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -29,7 +29,7 @@
 
 Summary: Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
-Version: 5.1.2
+Version: 5.1.8
 Release: %{release_prefix}%{?dist}.cpanel
 Group: System Environment/Daemons
 # Passenger code uses MIT license.
@@ -61,11 +61,9 @@ Patch2:         0003-Fix-the-path-for-passenger_native_support.patch
 Patch3:         0004-Suppress-logging-of-empty-messages.patch
 # Update the instance registry paths to include the SCL path
 Patch4:         0005-Add-the-instance-registry-path-for-the-ea-ruby24-SCL.patch
-# Disallow PassengerAppGroupName in .htaccess files
-Patch5:         0006-Disallow-PassengerAppGroupName-in-.htaccess.patch
 # Add a new directive to Passenger that will allow us to disallow
 # Passenger directives in .htaccess files
-Patch6:         0007-Add-new-PassengerDisableHtaccess-directive.patch
+Patch5:         0006-Add-new-PassengerDisableHtaccess-directive.patch
 
 BuildRequires: ea-apache24-devel
 BuildRequires: %{?scl:%scl_prefix}ruby
@@ -142,8 +140,7 @@ Phusion Passenger application server for %{scl_prefix}.
 %patch2 -p1 -b .nativelibdir
 %patch3 -p1 -b .emptymsglog
 %patch4 -p1 -b .instanceregpath
-%patch5 -p1 -b .disallowgroupname
-%patch6 -p1 -b .disablehtaccess
+%patch5 -p1 -b .disablehtaccess
 
 # Don't use bundled libuv
 rm -rf src/cxx_supportlib/vendor-modified/libuv
@@ -322,10 +319,13 @@ export USE_VENDORED_LIBUV=false
 %config(noreplace) %{_httpd_confdir}/*.conf
 %endif
 /var/cpanel/templates/apache2_4/passenger_apps.default
-%doc doc/Users?guide?Apache.txt
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Thu Oct 05 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.8-1
+- Upstream update to 5.1.8
+- Improvements to the 'PassengerDisableHtaccess' patch
+
 * Thu Jun 15 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.2-7
 - Add a new directive to Passenger: 'PassengerDisableHtaccess'
 
