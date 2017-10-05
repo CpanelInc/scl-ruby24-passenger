@@ -1,7 +1,7 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From cc688fac1ce532a5ae50b240f71cbd0042ba3f50 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Mon, 17 Apr 2017 16:06:34 -0500
-Subject: [PATCH 3/7] Fix the path for passenger_native_support
+Subject: [PATCH 3/6] Fix the path for passenger_native_support
 
 Adopted from the rubygem-passenger-4.0.18_native_dir patch from the
 rh-passenger40 SCL package.
@@ -22,3 +22,6 @@ index b6b3bf2b1..f100d66a3 100644
      rescue LoadError
        return false
      end
+-- 
+2.14.2
+
