@@ -1,22 +1,26 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From ca88756d87540fbfa87181f7393ba83435126158 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
-Date: Wed, 19 Apr 2017 17:24:55 -0500
-Subject: [PATCH 4/7] Suppress logging of empty messages
+Date: Mon, 2 Oct 2017 13:59:13 -0500
+Subject: [PATCH 4/6] Suppress logging of empty messages
 
 ---
- src/cxx_supportlib/Logging.cpp | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ src/cxx_supportlib/LoggingKit/Implementation.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/src/cxx_supportlib/Logging.cpp b/src/cxx_supportlib/Logging.cpp
-index f90aa34ae..da9b3e268 100644
---- a/src/cxx_supportlib/Logging.cpp
-+++ b/src/cxx_supportlib/Logging.cpp
-@@ -256,7 +256,7 @@ void
- printAppOutput(pid_t pid, const char *channelName, const char *message, unsigned int size) {
- 	if (printAppOutputAsDebuggingMessages) {
- 		P_DEBUG("App " << pid << " " << channelName << ": " << StaticString(message, size));
--	} else {
-+	} else if (size > 0) {
- 		char pidStr[sizeof("4294967295")];
- 		unsigned int pidStrLen, channelNameLen, totalLen;
+diff --git a/src/cxx_supportlib/LoggingKit/Implementation.cpp b/src/cxx_supportlib/LoggingKit/Implementation.cpp
+index 4abffa9ba..caacb37bd 100644
+--- a/src/cxx_supportlib/LoggingKit/Implementation.cpp
++++ b/src/cxx_supportlib/LoggingKit/Implementation.cpp
+@@ -323,6 +323,9 @@ void
+ logAppOutput(pid_t pid, const char *channelName, const char *message, unsigned int size) {
+ 	int targetFd;
  
++	if (size == 0) {
++		return;
++	}
+ 	if (OXT_LIKELY(context != NULL)) {
+ 		const ConfigRealization *configRealization = context->getConfigRealization();
+ 		if (configRealization->level < configRealization->appOutputLogLevel) {
+-- 
+2.14.2
+
