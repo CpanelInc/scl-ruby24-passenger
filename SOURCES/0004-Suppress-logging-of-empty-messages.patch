@@ -1,7 +1,7 @@
-From ca88756d87540fbfa87181f7393ba83435126158 Mon Sep 17 00:00:00 2001
+From 06409179ca70d75d09f5baae53b3edb84895ba26 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Mon, 2 Oct 2017 13:59:13 -0500
-Subject: [PATCH 4/6] Suppress logging of empty messages
+Subject: [PATCH 4/7] Suppress logging of empty messages
 
 ---
  src/cxx_supportlib/LoggingKit/Implementation.cpp | 3 +++
