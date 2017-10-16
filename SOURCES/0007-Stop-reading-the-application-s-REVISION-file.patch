@@ -1,0 +1,48 @@
+From d1162ffa80cbe72b687730f22aaf0482c235e8b6 Mon Sep 17 00:00:00 2001
+From: Rishwanth Yeddula <rish@cpanel.net>
+Date: Sun, 15 Oct 2017 16:35:46 -0500
+Subject: [PATCH 7/7] Stop reading the application's REVISION file
+
+Case SEC-312: Stop reading the REVISION file in the application
+directory.
+
+Previously, an application's REVISION file was read as the root
+user - which allowed malicious users to access any file on the
+system by creating a symlink to the REVISION file and using the
+passenger control sockets (through the passenger-status binary, etc)
+to read the content.
+---
+ src/agent/Core/SpawningKit/Spawner.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/agent/Core/SpawningKit/Spawner.h b/src/agent/Core/SpawningKit/Spawner.h
+index e65034ae9..99dedb852 100644
+--- a/src/agent/Core/SpawningKit/Spawner.h
++++ b/src/agent/Core/SpawningKit/Spawner.h
+@@ -721,7 +721,6 @@ protected:
+ 		prepareChroot(info, options);
+ 		info.userSwitching = prepareUserSwitching(options);
+ 		prepareSwitchingWorkingDirectory(info, options);
+-		inferApplicationInfo(info);
+ 		return info;
+ 	}
+ 
+@@ -775,6 +774,7 @@ protected:
+ 		assert(info.appRootPathsInsideChroot.back() == info.appRootInsideChroot);
+ 	}
+ 
++#ifdef false
+ 	void inferApplicationInfo(SpawnPreparationInfo &info) const {
+ 		info.codeRevision = readFromRevisionFile(info);
+ 		if (info.codeRevision.empty()) {
+@@ -817,6 +817,7 @@ protected:
+ 			return string();
+ 		}
+ 	}
++#endif
+ 
+ 	bool shouldLoadShellEnvvars(const Options &options, const SpawnPreparationInfo &preparation) const {
+ 		if (options.loadShellEnvvars) {
+-- 
+2.14.2
+
