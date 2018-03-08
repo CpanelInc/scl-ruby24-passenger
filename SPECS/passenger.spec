@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 2
+%define release_prefix 3
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -83,7 +83,7 @@ BuildRequires: %{?scl:%scl_prefix}rubygem(mizuho)
 BuildRequires: libcurl-devel
 BuildRequires: zlib-devel
 BuildRequires: pcre-devel
-BuildRequires: openssl-devel
+BuildRequires: ea-openssl-devel
 BuildRequires: %{?scl:%scl_prefix}libuv-devel
 
 BuildRequires: scl-utils
@@ -166,6 +166,10 @@ CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ;
 CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ;
 EXTRA_CXX_LDFLAGS="-Wl,-rpath=%{_libdir},--enable-new-dtags "; export EXTRA_CXX_LDFLAGS;
 FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ;
+
+export EXTRA_CFLAGS=-I/opt/cpanel/ea-openssl/include
+export EXTRA_CXXFLAGS=-I/opt/cpanel/ea-openssl/include
+export EXTRA_LDFLAGS=-L/opt/cpanel/ea-openssl/lib
 
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
@@ -325,6 +329,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Tue Mar 06 2018 Daniel Muey <dan@cpanel.net> - 5.1.8-3
+- ZC-3402: Update for ea-openssl shared object
+
 * Thu Oct 05 2017 Rishwanth Yeddula <rish@cpanel.net> - 5.1.8-2
 - SEC-312: Stop reading the 'REVISION' file. This addresses an
   arbitrary file read vulnerability in passenger.
