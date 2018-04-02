@@ -1,7 +1,7 @@
-From 06409179ca70d75d09f5baae53b3edb84895ba26 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Mon, 2 Oct 2017 13:59:13 -0500
-Subject: [PATCH 4/7] Suppress logging of empty messages
+Subject: [PATCH 4/8] Suppress logging of empty messages
 
 ---
  src/cxx_supportlib/LoggingKit/Implementation.cpp | 3 +++
@@ -21,6 +21,3 @@ index 4abffa9ba..caacb37bd 100644
  	if (OXT_LIKELY(context != NULL)) {
  		const ConfigRealization *configRealization = context->getConfigRealization();
  		if (configRealization->level < configRealization->appOutputLogLevel) {
--- 
-2.14.2
-
