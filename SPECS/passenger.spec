@@ -20,12 +20,14 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 3
+%define release_prefix 4
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
 %global _httpd_modconfdir  %{_root_sysconfdir}/apache2/conf.modules.d
 %global _httpd_moddir      %{_root_libdir}/apache2/modules
+
+%define ea_libcurl_ver 7.58.0-5
 
 Summary: Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
@@ -66,6 +68,8 @@ Patch4:         0005-Add-the-instance-registry-path-for-the-ea-ruby24-SCL.patch
 Patch5:         0006-Add-new-PassengerDisableHtaccess-directive.patch
 # Stop reading the REVISION file
 Patch6:         0007-Stop-reading-the-application-s-REVISION-file.patch
+# Build against ea-libcurl
+Patch7:         0008-Use-ea-libcurl-instead-of-system-curl.patch
 
 BuildRequires: ea-apache24-devel
 BuildRequires: %{?scl:%scl_prefix}ruby
@@ -80,10 +84,13 @@ BuildRequires: %{?scl:%scl_prefix}rubygem(rack)
 BuildRequires: %{?scl:%scl_prefix}rubygem(sqlite3)
 BuildRequires: %{?scl:%scl_prefix}rubygem(mizuho)
 
-BuildRequires: libcurl-devel
+BuildRequires: ea-libcurl >= %{ea_libcurl_ver}
+BuildRequires: ea-libcurl-devel >= %{ea_libcurl_ver}
+BuildRequires: ea-brotli ea-brotli-devel
 BuildRequires: zlib-devel
 BuildRequires: pcre-devel
-BuildRequires: ea-openssl-devel
+BuildRequires: ea-openssl >= 1.0.2n-3
+BuildRequires: ea-openssl-devel >= 1.0.2n-3
 BuildRequires: %{?scl:%scl_prefix}libuv-devel
 
 BuildRequires: scl-utils
@@ -91,6 +98,8 @@ BuildRequires: scl-utils-build
 %{?scl:BuildRequires: %{scl}-runtime}
 %{?scl:Requires:%scl_runtime}
 
+Requires: ea-libcurl >= %{ea_libcurl_ver}
+Requires: ea-openssl >= 1.0.2n-3
 Provides: bundled(boost) = %{bundled_boost_version}
 
 # Suppress auto-provides for module DSO
@@ -144,6 +153,7 @@ Phusion Passenger application server for %{scl_prefix}.
 %patch4 -p1 -b .instanceregpath
 %patch5 -p1 -b .disablehtaccess
 %patch6 -p1 -b .stoprevisionread
+%patch7 -p1 -b .useeacurl
 
 # Don't use bundled libuv
 rm -rf src/cxx_supportlib/vendor-modified/libuv
@@ -164,12 +174,10 @@ export USE_VENDORED_LIBUV=false
 export GEM_PATH=%{gem_dir}:${GEM_PATH:+${GEM_PATH}}${GEM_PATH:-`scl enable ea-ruby24 -- ruby -e "print Gem.path.join(':')"`}
 CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ;
 CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ;
-EXTRA_CXX_LDFLAGS="-Wl,-rpath=%{_libdir},--enable-new-dtags "; export EXTRA_CXX_LDFLAGS;
+EXTRA_CXX_LDFLAGS="-L/opt/cpanel/ea-openssl/%{_lib} -L/opt/cpanel/ea-brotli/%{_lib} -Wl,-rpath=/opt/cpanel/ea-openssl/%{_lib} -Wl,-rpath=/opt/cpanel/libcurl/%{_lib}  -Wl,-rpath=%{_libdir},--enable-new-dtags "; export EXTRA_CXX_LDFLAGS;
 FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ;
 
-export EXTRA_CFLAGS=-I/opt/cpanel/ea-openssl/include
-export EXTRA_CXXFLAGS=-I/opt/cpanel/ea-openssl/include
-export EXTRA_LDFLAGS=-L/opt/cpanel/ea-openssl/lib
+export EXTRA_CXXFLAGS="-I/opt/cpanel/ea-openssl/include -I/opt/cpanel/libcurl/include"
 
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
@@ -329,6 +337,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Wed Mar 28 2018 Rishwanth Yeddula <rish@cpanel.net> - 5.1.8-4
+- EA-7341: Ensure passenger compiles against ea-openssl and ea-libcurl
+
 * Tue Mar 06 2018 Daniel Muey <dan@cpanel.net> - 5.1.8-3
 - ZC-3402: Update for ea-openssl shared object
 
