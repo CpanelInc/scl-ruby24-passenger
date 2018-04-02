@@ -1,7 +1,7 @@
-From d1162ffa80cbe72b687730f22aaf0482c235e8b6 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Sun, 15 Oct 2017 16:35:46 -0500
-Subject: [PATCH 7/7] Stop reading the application's REVISION file
+Subject: [PATCH 7/8] Stop reading the application's REVISION file
 
 Case SEC-312: Stop reading the REVISION file in the application
 directory.
@@ -43,6 +43,3 @@ index e65034ae9..99dedb852 100644
  
  	bool shouldLoadShellEnvvars(const Options &options, const SpawnPreparationInfo &preparation) const {
  		if (options.loadShellEnvvars) {
--- 
-2.14.2
-
