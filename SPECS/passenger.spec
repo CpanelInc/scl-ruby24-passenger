@@ -20,13 +20,14 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 4
+%define release_prefix 5
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
 %global _httpd_modconfdir  %{_root_sysconfdir}/apache2/conf.modules.d
 %global _httpd_moddir      %{_root_libdir}/apache2/modules
 
+%define ea_openssl_ver 1.0.2o-2
 %define ea_libcurl_ver 7.58.0-5
 
 Summary: Phusion Passenger application server
@@ -89,8 +90,8 @@ BuildRequires: ea-libcurl-devel >= %{ea_libcurl_ver}
 BuildRequires: ea-brotli ea-brotli-devel
 BuildRequires: zlib-devel
 BuildRequires: pcre-devel
-BuildRequires: ea-openssl >= 1.0.2n-3
-BuildRequires: ea-openssl-devel >= 1.0.2n-3
+BuildRequires: ea-openssl >= %{ea_openssl_ver}
+BuildRequires: ea-openssl-devel >= %{ea_openssl_ver}
 BuildRequires: %{?scl:%scl_prefix}libuv-devel
 
 BuildRequires: scl-utils
@@ -99,7 +100,7 @@ BuildRequires: scl-utils-build
 %{?scl:Requires:%scl_runtime}
 
 Requires: ea-libcurl >= %{ea_libcurl_ver}
-Requires: ea-openssl >= 1.0.2n-3
+Requires: ea-openssl >= %{ea_openssl_ver}
 Provides: bundled(boost) = %{bundled_boost_version}
 
 # Suppress auto-provides for module DSO
@@ -337,6 +338,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Mon Apr 16 2018 Rishwanth Yeddula <rish@cpanel.net> - 5.1.8-5
+- EA-7382: Update dependency on ea-openssl to require the latest version with versioned symbols.
+
 * Wed Mar 28 2018 Rishwanth Yeddula <rish@cpanel.net> - 5.1.8-4
 - EA-7341: Ensure passenger compiles against ea-openssl and ea-libcurl
 
