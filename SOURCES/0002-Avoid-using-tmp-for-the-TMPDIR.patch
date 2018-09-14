@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Mon, 17 Apr 2017 12:13:01 -0500
-Subject: [PATCH 2/8] Avoid using /tmp for the TMPDIR
+Subject: [PATCH 2/7] Avoid using /tmp for the TMPDIR
 
 Adopted from the passenger-4.0.50-tmpdir patch from the rh-passenger40
 SCL package.
@@ -11,10 +11,10 @@ SCL package.
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/cxx_supportlib/Utils.cpp b/src/cxx_supportlib/Utils.cpp
-index a53b046c8..e77d4ec77 100644
+index 51ffb19..445cfa6 100644
 --- a/src/cxx_supportlib/Utils.cpp
 +++ b/src/cxx_supportlib/Utils.cpp
-@@ -637,7 +637,7 @@ const char *
+@@ -265,7 +265,7 @@ const char *
  getSystemTempDir() {
  	const char *temp_dir = getenv("TMPDIR");
  	if (temp_dir == NULL || *temp_dir == '\0') {
@@ -24,10 +24,10 @@ index a53b046c8..e77d4ec77 100644
  	return temp_dir;
  }
 diff --git a/src/ruby_supportlib/phusion_passenger/admin_tools.rb b/src/ruby_supportlib/phusion_passenger/admin_tools.rb
-index cafa69fee..c4d9cf45c 100644
+index cafa69f..c4d9cf4 100644
 --- a/src/ruby_supportlib/phusion_passenger/admin_tools.rb
 +++ b/src/ruby_supportlib/phusion_passenger/admin_tools.rb
-@@ -31,7 +31,7 @@ def self.tmpdir
+@@ -31,7 +31,7 @@ module PhusionPassenger
            return ENV[name]
          end
        end
