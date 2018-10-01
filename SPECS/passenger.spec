@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 5
+%define release_prefix 1
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -32,7 +32,7 @@
 
 Summary: Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
-Version: 5.1.8
+Version: 5.3.4
 Release: %{release_prefix}%{?dist}.cpanel
 Group: System Environment/Daemons
 # Passenger code uses MIT license.
@@ -64,13 +64,11 @@ Patch2:         0003-Fix-the-path-for-passenger_native_support.patch
 Patch3:         0004-Suppress-logging-of-empty-messages.patch
 # Update the instance registry paths to include the SCL path
 Patch4:         0005-Add-the-instance-registry-path-for-the-ea-ruby24-SCL.patch
+# Build against ea-libcurl
+Patch5:         0006-Use-ea-libcurl-instead-of-system-curl.patch
 # Add a new directive to Passenger that will allow us to disallow
 # Passenger directives in .htaccess files
-Patch5:         0006-Add-new-PassengerDisableHtaccess-directive.patch
-# Stop reading the REVISION file
-Patch6:         0007-Stop-reading-the-application-s-REVISION-file.patch
-# Build against ea-libcurl
-Patch7:         0008-Use-ea-libcurl-instead-of-system-curl.patch
+Patch6:         0007-Add-new-PassengerDisableHtaccess-directive.patch
 
 BuildRequires: ea-apache24-devel
 BuildRequires: %{?scl:%scl_prefix}ruby
@@ -152,9 +150,8 @@ Phusion Passenger application server for %{scl_prefix}.
 %patch2 -p1 -b .nativelibdir
 %patch3 -p1 -b .emptymsglog
 %patch4 -p1 -b .instanceregpath
-%patch5 -p1 -b .disablehtaccess
-%patch6 -p1 -b .stoprevisionread
-%patch7 -p1 -b .useeacurl
+%patch5 -p1 -b .useeacurl
+%patch6 -p1 -b .disablehtaccess
 
 # Don't use bundled libuv
 rm -rf src/cxx_supportlib/vendor-modified/libuv
@@ -338,6 +335,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Tue Sep 18 2018 Tim Mullin <tim@cpanel.net> - 5.3.4-1
+- EA-7381: Upstream update to 5.3.4
+
 * Mon Apr 16 2018 Rishwanth Yeddula <rish@cpanel.net> - 5.1.8-5
 - EA-7382: Update dependency on ea-openssl to require the latest version with versioned symbols.
 
