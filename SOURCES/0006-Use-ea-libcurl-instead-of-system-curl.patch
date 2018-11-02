@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Wed, 28 Mar 2018 14:46:31 -0500
-Subject: [PATCH 6/7] Use ea-libcurl instead of system curl
+Subject: [PATCH 6/8] Use ea-libcurl instead of system curl
 
 ---
  .../phusion_passenger/platform_info/curl.rb               | 8 ++++----
