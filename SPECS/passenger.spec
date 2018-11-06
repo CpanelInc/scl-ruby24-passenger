@@ -32,7 +32,7 @@
 
 Summary: Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
-Version: 5.3.4
+Version: 5.3.5
 Release: %{release_prefix}%{?dist}.cpanel
 Group: System Environment/Daemons
 # Passenger code uses MIT license.
@@ -66,9 +66,11 @@ Patch3:         0004-Suppress-logging-of-empty-messages.patch
 Patch4:         0005-Add-the-instance-registry-path-for-the-ea-ruby24-SCL.patch
 # Build against ea-libcurl
 Patch5:         0006-Use-ea-libcurl-instead-of-system-curl.patch
+# Fix a compile error caused in libcurl 7.62
+Patch6:         0007-Fixed-duplicate-case-value-caused-by-libcurl-7.62.patch
 # Add a new directive to Passenger that will allow us to disallow
 # Passenger directives in .htaccess files
-Patch6:         0007-Add-new-PassengerDisableHtaccess-directive.patch
+Patch7:         0008-Add-new-PassengerDisableHtaccess-directive.patch
 
 BuildRequires: ea-apache24-devel
 BuildRequires: %{?scl:%scl_prefix}ruby
@@ -151,7 +153,8 @@ Phusion Passenger application server for %{scl_prefix}.
 %patch3 -p1 -b .emptymsglog
 %patch4 -p1 -b .instanceregpath
 %patch5 -p1 -b .useeacurl
-%patch6 -p1 -b .disablehtaccess
+%patch6 -p1 -b .fixforlibcurl762
+%patch7 -p1 -b .disablehtaccess
 
 # Don't use bundled libuv
 rm -rf src/cxx_supportlib/vendor-modified/libuv
@@ -335,6 +338,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Fri Nov 02 2018 Tim Mullin <tim@cpanel.net> - 5.3.5-1
+- EA-7982: Upstream update to 5.3.5
+
 * Tue Sep 18 2018 Tim Mullin <tim@cpanel.net> - 5.3.4-1
 - EA-7381: Upstream update to 5.3.4
 
