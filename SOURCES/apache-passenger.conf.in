@@ -10,4 +10,5 @@ LoadModule passenger_module @PASSENGERSO@
    PassengerDefaultRuby @PASSENGERDEFAULTRUBY@
    PassengerDisableSecurityUpdateCheck on
    PassengerInstanceRegistryDir @PASSENGERINSTANCEDIR@
+   PassengerNodejs /opt/cpanel/ea-nodejs10/bin/node
 </IfModule>
