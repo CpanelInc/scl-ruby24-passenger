@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 3
+%define release_prefix 4
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -102,7 +102,6 @@ BuildRequires: scl-utils-build
 Requires: ea-libcurl >= %{ea_libcurl_ver}
 Requires: ea-openssl >= %{ea_openssl_ver}
 Provides: bundled(boost) = %{bundled_boost_version}
-Requires: ea-nodejs10
 
 # Suppress auto-provides for module DSO
 %{?filter_provides_in: %filter_provides_in %{_httpd_moddir}/.*\.so$}
@@ -339,6 +338,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Mon Jan 14 2019 Daniel Muey <dan@cpanel.net> - 5.3.5-4
+- Undo 5.3.5-3 change
+
 * Thu Jan 10 2019 Daniel Muey <dan@cpanel.net> - 5.3.5-3
 - ZC-4661: Make nodejs a requirement so that if they get one they get all of them, that way Application Manager has all the bells
 
