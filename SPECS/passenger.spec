@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 4
+%define release_prefix 1
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -32,7 +32,7 @@
 
 Summary: Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
-Version: 5.3.5
+Version: 5.3.7
 Release: %{release_prefix}%{?dist}.cpanel
 Group: System Environment/Daemons
 # Passenger code uses MIT license.
@@ -66,11 +66,9 @@ Patch3:         0004-Suppress-logging-of-empty-messages.patch
 Patch4:         0005-Add-the-instance-registry-path-for-the-ea-ruby24-SCL.patch
 # Build against ea-libcurl
 Patch5:         0006-Use-ea-libcurl-instead-of-system-curl.patch
-# Fix a compile error caused in libcurl 7.62
-Patch6:         0007-Fixed-duplicate-case-value-caused-by-libcurl-7.62.patch
 # Add a new directive to Passenger that will allow us to disallow
 # Passenger directives in .htaccess files
-Patch7:         0008-Add-new-PassengerDisableHtaccess-directive.patch
+Patch6:         0007-Add-new-PassengerDisableHtaccess-directive.patch
 
 BuildRequires: ea-apache24-devel
 BuildRequires: %{?scl:%scl_prefix}ruby
@@ -153,8 +151,7 @@ Phusion Passenger application server for %{scl_prefix}.
 %patch3 -p1 -b .emptymsglog
 %patch4 -p1 -b .instanceregpath
 %patch5 -p1 -b .useeacurl
-%patch6 -p1 -b .fixforlibcurl762
-%patch7 -p1 -b .disablehtaccess
+%patch6 -p1 -b .disablehtaccess
 
 # Don't use bundled libuv
 rm -rf src/cxx_supportlib/vendor-modified/libuv
@@ -338,6 +335,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Wed Jan 30 2019 Tim Mullin <tim@cpanel.net> - 5.3.7-1
+- EA-8185: Upstream update to 5.3.7
+
 * Mon Jan 14 2019 Daniel Muey <dan@cpanel.net> - 5.3.5-4
 - Undo 5.3.5-3 change
 

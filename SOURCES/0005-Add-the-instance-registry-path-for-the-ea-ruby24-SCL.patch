@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Fri, 21 Apr 2017 17:04:30 -0500
-Subject: [PATCH 5/8] Add the instance registry path for the ea-ruby24 SCL path
+Subject: [PATCH 5/7] Add the instance registry path for the ea-ruby24 SCL path
  to the default list
 
 ---
