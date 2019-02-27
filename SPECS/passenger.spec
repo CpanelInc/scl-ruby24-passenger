@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 2
+%define release_prefix 3
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -335,6 +335,9 @@ export USE_VENDORED_LIBUV=false
 %{_httpd_moddir}/mod_passenger.so
 
 %changelog
+* Wed Feb 27 2019 Cory McIntire <cory@cpanel.net> - 5.3.7-3
+- EA-8238: Add PassengerNodejs to passenger_apps.default
+
 * Tue Feb 19 2019 Cory McIntire <cory@cpanel.net> - 5.3.7-2
 - EA-8237: remove PassengerNodejs path until we ship ea-nodejs10
 
