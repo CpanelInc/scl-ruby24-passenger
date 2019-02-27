@@ -14,6 +14,7 @@
         PassengerBaseURI "[% data.base_uri %]"
         PassengerAppRoot "[% data.path %]"
         PassengerAppGroupName "[% data.cpuser _ ' - ' _ data.name %]"
+        PassengerNodejs /opt/cpanel/ea-nodejs10/bin/node
     </IfModule>
 </Location>
 <Directory "[% data.path %]">
