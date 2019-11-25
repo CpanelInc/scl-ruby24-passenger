@@ -1,0 +1,76 @@
+#!/usr/local/cpanel/3rdparty/bin/perl
+# cpanel - find-latest-version                  Copyright(c) 2019 cPanel, L.L.C.
+#                                                           All rights Reserved.
+# copyright@cpanel.net                                         http://cpanel.net
+# This code is subject to the cPanel license. Unauthorized copying is prohibited
+
+package ea_ruby_passenger::find_latest_version;
+
+use strict;
+use warnings;
+
+use File::Temp;
+use File::chdir;
+use File::Glob;
+use Cpanel::SafeRun::Object ();
+
+use FindBin;
+use lib "../ea-tools/lib/ea4_tool";    # assumes ea-tools is checked out next to this repo
+use ea4_tool::util ();
+
+my $version;
+my $name;
+my $url;
+my $type;
+my $hex;
+
+ea4_tool::util::find_latest_version( \&_get_required, \&_add_sum ) if !caller();
+
+###############
+#### helpers ##
+###############
+
+sub _get_required {
+    my ($http) = @_;
+
+    my $tempdir = File::Temp::tempdir( CLEANUP => 1 );
+
+    $http->mirror( 'https://www.phusionpassenger.com/latest_stable_tarball', $tempdir . '/latest.tar.gz' );
+
+    my ( $version, $url, $name );
+
+    {
+        local $CWD = $tempdir;
+
+        my $run = Cpanel::SafeRun::Object->new(
+            program => 'tar',
+            args    => [ 'xzf', 'latest.tar.gz' ],
+        );
+
+        if ( $run->CHILD_ERROR() ) {
+            die "Unable to untar passenger's tarball\n" . $run->stderr . "\n";
+        }
+
+        my @files = File::Glob::bsd_glob('passenger*');
+        die "Cannot find passenger's exploded directory\n" if ( !@files );
+
+        my $passenger = $files[0];
+        if ( $passenger =~ m/^passenger-(\d+\.\d+\.\d+)$/ ) {
+            $version = $1;
+        }
+    }
+
+    $url  = 'https://www.phusionpassenger.com/latest_stable_tarball';
+    $name = 'passenger-' . $version . '.tar.gz';
+
+    return ( $version, $url, $name );
+}
+
+sub _add_sum {
+    my ( $http, $hr ) = @_;
+
+    warn "Passenger does not provide signatures for their latest tarballs, you will need to validate this manually\n";
+
+    return 1;
+}
+
