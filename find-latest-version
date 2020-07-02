@@ -9,20 +9,8 @@ package ea_ruby_passenger::find_latest_version;
 use strict;
 use warnings;
 
-use File::Temp;
-use File::chdir;
-use File::Glob;
-use Cpanel::SafeRun::Object ();
-
-use FindBin;
 use lib "../ea-tools/lib/ea4_tool";    # assumes ea-tools is checked out next to this repo
 use ea4_tool::util ();
-
-my $version;
-my $name;
-my $url;
-my $type;
-my $hex;
 
 ea4_tool::util::find_latest_version( \&_get_required, \&_add_sum ) if !caller();
 
@@ -33,35 +21,18 @@ ea4_tool::util::find_latest_version( \&_get_required, \&_add_sum ) if !caller();
 sub _get_required {
     my ($http) = @_;
 
-    my $tempdir = File::Temp::tempdir( CLEANUP => 1 );
-
-    $http->mirror( 'https://www.phusionpassenger.com/latest_stable_tarball', $tempdir . '/latest.tar.gz' );
-
-    my ( $version, $url, $name );
-
-    {
-        local $CWD = $tempdir;
-
-        my $run = Cpanel::SafeRun::Object->new(
-            program => 'tar',
-            args    => [ 'xzf', 'latest.tar.gz' ],
-        );
-
-        if ( $run->CHILD_ERROR() ) {
-            die "Unable to untar passenger's tarball\n" . $run->stderr . "\n";
-        }
-
-        my @files = File::Glob::bsd_glob('passenger*');
-        die "Cannot find passenger's exploded directory\n" if ( !@files );
-
-        my $passenger = $files[0];
-        if ( $passenger =~ m/^passenger-(\d+\.\d+\.\d+)$/ ) {
-            $version = $1;
-        }
+    my $res = $http->get("https://api.github.com/repos/phusion/passenger/releases");
+    if ( !$res->{success} ) {
+        die "Could not GET passenger info from github ($res->{status} $res->{reason})\n\t Throttled? `curl -I https://api.github.com/rate_limit 2>&1 | grep ^X-RateLimit`\n";
     }
 
-    $url  = 'https://www.phusionpassenger.com/latest_stable_tarball';
-    $name = 'passenger-' . $version . '.tar.gz';
+    # get $version, $url, $name from $res
+    my $version = Cpanel::JSON::Load( $res->{content} )->[0]{tag_name};
+    $version =~ s/release-//;
+    die "Could not determine version from github\n" if !$version;
+
+    my $name = "release-$version.tar.gz";
+    my $url  = "https://github.com/phusion/passenger/archive/$name";
 
     return ( $version, $url, $name );
 }
@@ -69,8 +40,27 @@ sub _get_required {
 sub _add_sum {
     my ( $http, $hr ) = @_;
 
-    warn "Passenger does not provide signatures for their latest tarballs, you will need to validate this manually\n";
+    # Optional: Set $hr->{tarball}{sum}{hex} and $hr->{tarball}{sum}{type} (sha256, sha1, md5, anythign Digest.pm can handle)
+    #           die if there is a problem determining either of those values
+    # otherwise this is a no-op
 
-    return 1;
+    return;
 }
 
+__END__
+
+=encoding utf-8
+
+=head1 README
+
+They use sane version tagging so we don’t have to loop and be convoluted like we do w/ PHP.
+
+We can add checksum support if github releases had that information which isn’t available via:
+
+=over
+
+=item API call L<https://developer.github.com/v3/repos/releases/#get-the-latest-release>
+
+=item web view L<https://github.com/phusion/passenger/releases>
+
+=back
