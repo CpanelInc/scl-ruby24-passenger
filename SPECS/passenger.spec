@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 1
+%define release_prefix 2
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -195,6 +195,10 @@ rake fakeroot \
 %{?scl:EOF}
 
 %install
+
+mkdir -p %{buildroot}/opt/cpanel/ea-ruby24/src/
+tar xzf %{SOURCE0} -C %{buildroot}/opt/cpanel/ea-ruby24/src/
+
 %{?scl:scl enable ea-ruby24 - << \EOF}
 export USE_VENDORED_LIBEV=true
 export USE_VENDORED_LIBUV=false
@@ -333,8 +337,12 @@ export USE_VENDORED_LIBUV=false
 %endif
 /var/cpanel/templates/apache2_4/passenger_apps.default
 %{_httpd_moddir}/mod_passenger.so
+/opt/cpanel/ea-ruby24/src/passenger-%{version}/
 
 %changelog
+* Thu Jun 25 2020 Dan Muey <dan@cpanel.net> - 6.0.4-2
+- ZC-7058: Include passenger source to support ea-nginx (and potentially others)
+
 * Mon Mar 30 2020 Tim Mullin <tim@cpanel.net> - 6.0.4-1
 - EA-8898: Update scl-ruby24-passenger from v5.3.7 to v6.0.4
 
