@@ -1,4 +1,4 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 1ba768c5d6b2c2259f251cfcc23c6edc7dd966a0 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Mon, 17 Apr 2017 16:06:34 -0500
 Subject: [PATCH 3/7] Fix the path for passenger_native_support
@@ -13,7 +13,7 @@ diff --git a/src/ruby_supportlib/phusion_passenger/native_support.rb b/src/ruby_
 index 8c18b46..1114530 100644
 --- a/src/ruby_supportlib/phusion_passenger/native_support.rb
 +++ b/src/ruby_supportlib/phusion_passenger/native_support.rb
-@@ -110,7 +110,7 @@ module PhusionPassenger
+@@ -110,7 +110,7 @@ def load_from_buildout_dir
      end
  
      def load_from_load_path
@@ -22,3 +22,6 @@ index 8c18b46..1114530 100644
      rescue LoadError
        return false
      end
+-- 
+2.25.1
+

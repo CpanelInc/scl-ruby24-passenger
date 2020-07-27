@@ -1,4 +1,4 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From bc0f973f984e34f9a18885abc38dbf1a7ffd5d78 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Fri, 21 Apr 2017 17:04:30 -0500
 Subject: [PATCH 5/7] Add the instance registry path for the ea-ruby24 SCL path
@@ -12,7 +12,7 @@ diff --git a/src/ruby_supportlib/phusion_passenger/admin_tools/instance_registry
 index b987534..e194875 100644
 --- a/src/ruby_supportlib/phusion_passenger/admin_tools/instance_registry.rb
 +++ b/src/ruby_supportlib/phusion_passenger/admin_tools/instance_registry.rb
-@@ -102,7 +102,7 @@ module PhusionPassenger
+@@ -102,7 +102,7 @@ def default_paths
          #
          # The RPM packages configure Apache and Nginx to use /var/run/passenger-instreg
          # as the instance registry dir. See https://github.com/phusion/passenger/issues/1475
@@ -21,3 +21,6 @@ index b987534..e194875 100644
        end
  
        def string_env(name)
+-- 
+2.25.1
+

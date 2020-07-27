@@ -1,4 +1,4 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From de45fe63378999055fa3a812fca87427dd1ff92f Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Wed, 28 Mar 2018 14:46:31 -0500
 Subject: [PATCH 6/7] Use ea-libcurl instead of system curl
@@ -25,7 +25,7 @@ index 52dec20..651760f 100644
          if version >= '070c01'
            # Curl >= 7.12.1 supports curl_easy_reset()
            result << " -DHAS_CURL_EASY_RESET"
-@@ -43,7 +43,7 @@ module PhusionPassenger
+@@ -43,7 +43,7 @@ def self.curl_flags
      memoize :curl_flags
  
      def self.curl_libs
@@ -34,7 +34,7 @@ index 52dec20..651760f 100644
        if result.empty?
          return nil
        else
-@@ -53,7 +53,7 @@ module PhusionPassenger
+@@ -53,7 +53,7 @@ def self.curl_libs
      memoize :curl_libs
  
      def self.curl_supports_ssl?
@@ -43,3 +43,6 @@ index 52dec20..651760f 100644
        return features =~ /SSL/
      end
      memoize :curl_supports_ssl?
+-- 
+2.25.1
+

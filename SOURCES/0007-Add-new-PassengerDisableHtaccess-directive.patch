@@ -1,4 +1,4 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 951e08f064b15780891de554a8a2a6c0f16a8c83 Mon Sep 17 00:00:00 2001
 From: Tim Mullin <tim@cpanel.net>
 Date: Mon, 30 Mar 2020 13:33:01 -0500
 Subject: [PATCH 7/7] Add new 'PassengerDisableHtaccess' directive
@@ -875,10 +875,10 @@ index b94a0d0..e0333c3 100644
    when :global
      # We only warn here instead of returning an error because this issue
 diff --git a/src/apache2_module/Hooks.cpp b/src/apache2_module/Hooks.cpp
-index e322a24..153e65a 100644
+index 7884f5a..101f479 100644
 --- a/src/apache2_module/Hooks.cpp
 +++ b/src/apache2_module/Hooks.cpp
-@@ -1350,6 +1350,7 @@ public:
+@@ -1354,6 +1354,7 @@ public:
  		config["response_buffer_high_watermark"] = serverConfig.responseBufferHighWatermark;
  		config["stat_throttle_rate"] = serverConfig.statThrottleRate;
  		config["turbocaching"] = serverConfig.turbocaching;
@@ -971,10 +971,10 @@ index 32dd488..8f057f9 100644
  		disableSecurityUpdateCheckExplicitlySet = false;
  		showVersionInHeaderExplicitlySet = false;
 diff --git a/src/ruby_supportlib/phusion_passenger/apache2/config_options.rb b/src/ruby_supportlib/phusion_passenger/apache2/config_options.rb
-index 7349e7c..9853ec6 100644
+index 37f63f7..919acce 100644
 --- a/src/ruby_supportlib/phusion_passenger/apache2/config_options.rb
 +++ b/src/ruby_supportlib/phusion_passenger/apache2/config_options.rb
-@@ -277,6 +277,14 @@ APACHE2_CONFIGURATION_OPTIONS = [
+@@ -277,6 +277,14 @@
      :default   => true,
      :desc      => "Whether to enable turbocaching in #{PROGRAM_NAME}."
    },
@@ -989,3 +989,6 @@ index 7349e7c..9853ec6 100644
    {
      :name      => 'PassengerShowVersionInHeader',
      :type      => :flag,
+-- 
+2.25.1
+
