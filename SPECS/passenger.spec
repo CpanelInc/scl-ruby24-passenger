@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 2
+%define release_prefix 1
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -32,7 +32,7 @@
 
 Summary: Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
-Version: 6.0.4
+Version: 6.0.6
 Release: %{release_prefix}%{?dist}.cpanel
 Group: System Environment/Daemons
 # Passenger code uses MIT license.
@@ -340,6 +340,9 @@ export USE_VENDORED_LIBUV=false
 /opt/cpanel/ea-ruby24/src/passenger-%{version}/
 
 %changelog
+* Mon Jul 27 2020 Cory McIntire <cory@cpanel.net> - 6.0.6-1
+- EA-9194: Update scl-ruby24-passenger from v6.0.4 to v6.0.6
+
 * Thu Jun 25 2020 Dan Muey <dan@cpanel.net> - 6.0.4-2
 - ZC-7058: Include passenger source to support ea-nginx (and potentially others)
 
