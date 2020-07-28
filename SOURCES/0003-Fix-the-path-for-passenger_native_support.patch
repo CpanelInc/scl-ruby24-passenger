@@ -1,4 +1,4 @@
-From 1ba768c5d6b2c2259f251cfcc23c6edc7dd966a0 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Mon, 17 Apr 2017 16:06:34 -0500
 Subject: [PATCH 3/7] Fix the path for passenger_native_support
@@ -22,6 +22,3 @@ index 8c18b46..1114530 100644
      rescue LoadError
        return false
      end
--- 
-2.25.1
-

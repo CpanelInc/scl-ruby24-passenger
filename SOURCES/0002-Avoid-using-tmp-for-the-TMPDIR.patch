@@ -1,4 +1,4 @@
-From 44b096cd1cb66ac6d50dc73f4c2c0e0ee7d5cd7d Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Rishwanth Yeddula <rish@cpanel.net>
 Date: Mon, 17 Apr 2017 12:13:01 -0500
 Subject: [PATCH 2/7] Avoid using /tmp for the TMPDIR
@@ -36,6 +36,3 @@ index cafa69f..c4d9cf4 100644
      end
  
      def self.process_is_alive?(pid)
--- 
-2.25.1
-

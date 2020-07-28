@@ -46,6 +46,7 @@ URL: https://www.phusionpassenger.com
 Source: http://s3.amazonaws.com/phusion-passenger/releases/passenger-%{version}.tar.gz
 Source1: passenger.logrotate
 Source2: rubygem-passenger.tmpfiles
+Source3: cxxcodebuilder.tar.gz
 Source10: apache-passenger.conf.in
 Source12: config.json
 # These scripts are needed only before we update httpd24-httpd.service
@@ -152,6 +153,8 @@ Phusion Passenger application server for %{scl_prefix}.
 %patch4 -p1 -b .instanceregpath
 %patch5 -p1 -b .useeacurl
 %patch6 -p1 -b .disablehtaccess
+
+tar -xf %{SOURCE3}
 
 # Don't use bundled libuv
 rm -rf src/cxx_supportlib/vendor-modified/libuv
@@ -337,7 +340,7 @@ export USE_VENDORED_LIBUV=false
 %endif
 /var/cpanel/templates/apache2_4/passenger_apps.default
 %{_httpd_moddir}/mod_passenger.so
-/opt/cpanel/ea-ruby24/src/passenger-%{version}/
+/opt/cpanel/ea-ruby24/src/passenger-release-%{version}/
 
 %changelog
 * Mon Jul 27 2020 Cory McIntire <cory@cpanel.net> - 6.0.6-1
