@@ -143,7 +143,7 @@ Requires: %{?scl:%scl_prefix}ruby
 Phusion Passenger application server for %{scl_prefix}.
 
 %prep
-%setup -q %{?scl:-n %{gem_name}-%{version}}
+%setup -q %{?scl:-n %{gem_name}-release-%{version}}
 
 %patch0 -p1 -b .libuv
 %patch1 -p1 -b .tmpdir
