@@ -25,7 +25,7 @@ index 52dec20..651760f 100644
          if version >= '070c01'
            # Curl >= 7.12.1 supports curl_easy_reset()
            result << " -DHAS_CURL_EASY_RESET"
-@@ -43,7 +43,7 @@ module PhusionPassenger
+@@ -43,7 +43,7 @@ def self.curl_flags
      memoize :curl_flags
  
      def self.curl_libs
@@ -34,7 +34,7 @@ index 52dec20..651760f 100644
        if result.empty?
          return nil
        else
-@@ -53,7 +53,7 @@ module PhusionPassenger
+@@ -53,7 +53,7 @@ def self.curl_libs
      memoize :curl_libs
  
      def self.curl_supports_ssl?
