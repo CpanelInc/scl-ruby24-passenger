@@ -12,7 +12,7 @@ diff --git a/src/ruby_supportlib/phusion_passenger/admin_tools/instance_registry
 index b987534..e194875 100644
 --- a/src/ruby_supportlib/phusion_passenger/admin_tools/instance_registry.rb
 +++ b/src/ruby_supportlib/phusion_passenger/admin_tools/instance_registry.rb
-@@ -102,7 +102,7 @@ module PhusionPassenger
+@@ -102,7 +102,7 @@ def default_paths
          #
          # The RPM packages configure Apache and Nginx to use /var/run/passenger-instreg
          # as the instance registry dir. See https://github.com/phusion/passenger/issues/1475

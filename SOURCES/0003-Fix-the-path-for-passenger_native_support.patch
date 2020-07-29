@@ -13,7 +13,7 @@ diff --git a/src/ruby_supportlib/phusion_passenger/native_support.rb b/src/ruby_
 index 8c18b46..1114530 100644
 --- a/src/ruby_supportlib/phusion_passenger/native_support.rb
 +++ b/src/ruby_supportlib/phusion_passenger/native_support.rb
-@@ -110,7 +110,7 @@ module PhusionPassenger
+@@ -110,7 +110,7 @@ def load_from_buildout_dir
      end
  
      def load_from_load_path
