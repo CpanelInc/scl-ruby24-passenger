@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 2
+%define release_prefix 3
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -175,7 +175,7 @@ export USE_VENDORED_LIBUV=false
 export GEM_PATH=%{gem_dir}:${GEM_PATH:+${GEM_PATH}}${GEM_PATH:-`scl enable ea-ruby24 -- ruby -e "print Gem.path.join(':')"`}
 CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ;
 CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ;
-EXTRA_CXX_LDFLAGS="-L/opt/cpanel/ea-openssl/%{_lib} -L/opt/cpanel/ea-brotli/%{_lib} -Wl,-rpath=/opt/cpanel/ea-openssl/%{_lib} -Wl,-rpath=/opt/cpanel/libcurl/%{_lib}  -Wl,-rpath=%{_libdir},--enable-new-dtags "; export EXTRA_CXX_LDFLAGS;
+EXTRA_CXX_LDFLAGS="-L/opt/cpanel/ea-openssl/%{_lib} -L/opt/cpanel/ea-brotli/%{_lib} -Wl,-rpath=/opt/cpanel/ea-brotli/lib -Wl,-rpath=/opt/cpanel/ea-openssl/%{_lib} -Wl,-rpath=/opt/cpanel/libcurl/%{_lib}  -Wl,-rpath=%{_libdir},--enable-new-dtags "; export EXTRA_CXX_LDFLAGS;
 FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ;
 
 export EXTRA_CXXFLAGS="-I/opt/cpanel/ea-openssl/include -I/opt/cpanel/libcurl/include"
@@ -344,6 +344,9 @@ export USE_VENDORED_LIBUV=false
 /opt/cpanel/ea-ruby24/src/passenger-release-%{version}/
 
 %changelog
+* Tue Oct 27 2020 Tim Mullin <tim@cpanel.net> - 6.0.6-3
+- EA-9390: Fix build with latest ea-brotli (v1.0.9)
+
 * Thu Aug 06 2020 Tim Mullin <tim@cpanel.net> - 6.0.6-2
 - EA-9221: Include the cxxbuilder files with the source code installed by mod_passenger
 
