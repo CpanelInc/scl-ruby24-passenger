@@ -43,7 +43,7 @@ Group: System Environment/Daemons
 License: Boost and BSD and BSD with advertising and MIT and zlib
 URL: https://www.phusionpassenger.com
 
-Source: http://s3.amazonaws.com/phusion-passenger/releases/passenger-%{version}.tar.gz
+Source: http://s3.amazonaws.com/phusion-passenger/releases/release-%{version}.tar.gz
 Source1: passenger.logrotate
 Source2: rubygem-passenger.tmpfiles
 Source3: cxxcodebuilder.tar.gz
