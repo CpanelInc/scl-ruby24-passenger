@@ -231,7 +231,13 @@ sed -i 's|@PASSENGERSO@|%{_httpd_moddir}/mod_passenger.so|g' passenger.conf
 sed -i 's|@PASSENGERINSTANCEDIR@|%{_localstatedir}/run/passenger-instreg|g' passenger.conf
 
 mkdir -p %{buildroot}/var/cpanel/templates/apache2_4
+# keep version agnostic name for old ULCs :(
 install -m 0640 %{SOURCE14} %{buildroot}/var/cpanel/templates/apache2_4/passenger_apps.default
+# have version/package specific name for new ULCs :)
+install -m 0640 %{SOURCE14} %{buildroot}/var/cpanel/templates/apache2_4/ruby24-mod_passenger.appconf.default
+
+mkdir -p %{buildroot}/etc/cpanel/ea4
+echo -n 24 > %{buildroot}/etc/cpanel/ea4/passenger.ruby
 
 %if "%{_httpd_modconfdir}" != "%{_httpd_confdir}"
     sed -n /^LoadModule/p passenger.conf > 10-passenger.conf
@@ -342,12 +348,15 @@ export USE_VENDORED_LIBUV=false
 %config(noreplace) %{_httpd_confdir}/*.conf
 %endif
 /var/cpanel/templates/apache2_4/passenger_apps.default
+/var/cpanel/templates/apache2_4/ruby24-mod_passenger.appconf.default
+/etc/cpanel/ea4/passenger.ruby
 %{_httpd_moddir}/mod_passenger.so
 /opt/cpanel/ea-ruby24/src/passenger-release-%{version}/
 
 %changelog
 * Mon Dec 07 2020 Daniel Muey <dan@cpanel.net> - 6.0.7-2
 - ZC-7655: Provide/Conflict `apache24-passenger`
+- ZC-7897: Add version/package specific template file (and support userdata paths like nginx)
 
 * Sun Nov 29 2020 Cory McIntire <cory@cpanel.net> - 6.0.7-1
 - EA-9453: Update scl-ruby24-passenger from v6.0.6 to v6.0.7
