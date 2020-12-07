@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 1
+%define release_prefix 2
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -121,6 +121,8 @@ Requires: ea-apache24-mmn = %{_httpd_mmn}
 Requires: %{scl_prefix}ruby-wrapper
 Requires: %{name}%{?_isa} = %{version}-%{release}
 License: Boost and BSD and BSD with advertising and MIT and zlib
+Provides: apache24-passenger
+Conflicts: apache24-passenger
 
 %description -n %{scl_prefix}mod_passenger
 This package contains the pluggable Apache server module for Phusion Passenger(r).
@@ -344,6 +346,9 @@ export USE_VENDORED_LIBUV=false
 /opt/cpanel/ea-ruby24/src/passenger-release-%{version}/
 
 %changelog
+* Mon Dec 07 2020 Daniel Muey <dan@cpanel.net> - 6.0.7-2
+- ZC-7655: Provide/Conflict `apache24-passenger`
+
 * Sun Nov 29 2020 Cory McIntire <cory@cpanel.net> - 6.0.7-1
 - EA-9453: Update scl-ruby24-passenger from v6.0.6 to v6.0.7
 
