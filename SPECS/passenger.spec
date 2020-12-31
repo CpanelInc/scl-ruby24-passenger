@@ -326,23 +326,36 @@ export USE_VENDORED_LIBUV=false
 # rake test:cxx || true
 %{?scl:EOF}
 
-%pre
+%pre -n %{scl_prefix}mod_passenger
 
-if [ -e "/etc/cpanel/ea4/passenger.python" ] ; then
-    mkdir -p %{_localstatedir}/lib/rpm-state/ea-ruby24-passenger
-    touch %{_localstatedir}/lib/rpm-state/ea-ruby24-passenger/has_python_conf
+if [ -e "%{_localstatedir}/lib/rpm-state/ea-ruby24-passenger/has_python_conf" ] ; then
+    unlink %{_localstatedir}/lib/rpm-state/ea-ruby24-passenger/has_python_conf
 fi
 
-%post
+if [ -e "/etc/cpanel/ea4/passenger.python" ] ; then
+    echo "Has existing python configuration, will leave that as is …"
+    mkdir -p %{_localstatedir}/lib/rpm-state/ea-ruby24-passenger
+    touch %{_localstatedir}/lib/rpm-state/ea-ruby24-passenger/has_python_conf
+else
+    echo "Will verify new python configuration …"
+fi
+
+%posttrans -n %{scl_prefix}mod_passenger
 
 if [ ! -f "%{_localstatedir}/lib/rpm-state/ea-ruby24-passenger/has_python_conf" ] ; then
+    echo "… Ensuring new python configuration is valid …";
     if [ ! -x "/usr/bin/python3" ] ; then
+        echo "… no python3, trying python …"
         if [ -x "/usr/bin/python" ] ; then
-           echo -n /usr/bin/python > /etc/cpanel/ea4/passenger.python
+            echo "… using python";
+            echo -n "/usr/bin/python" > /etc/cpanel/ea4/passenger.python
         else
+            echo "… no python, removing value";
             echo -n "" > /etc/cpanel/ea4/passenger.python
         fi
     fi
+else
+    echo "… using previous python configuration"
 fi
 
 %files
