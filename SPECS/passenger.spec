@@ -20,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 3
+%define release_prefix 4
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -394,6 +394,9 @@ fi
 /opt/cpanel/ea-ruby24/src/passenger-release-%{version}/
 
 %changelog
+* Tue Dec 28 2021 Dan Muey <dan@cpanel.net> - 6.0.7-4
+- ZC-9589: Update DISABLE_BUILD to match OBS
+
 * Mon Dec 28 2020 Daniel Muey <dan@cpanel.net> - 6.0.7-3
 - ZC-8188: provide `/etc/cpanel/ea4/passenger.python`
 
