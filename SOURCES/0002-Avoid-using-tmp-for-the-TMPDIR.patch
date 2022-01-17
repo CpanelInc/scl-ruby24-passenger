@@ -24,14 +24,14 @@ index 8f9cbe7..2e92968 100644
  	return temp_dir;
  }
 diff --git a/src/ruby_supportlib/phusion_passenger/admin_tools.rb b/src/ruby_supportlib/phusion_passenger/admin_tools.rb
-index cafa69f..c4d9cf4 100644
+index f1432f2..c4d9cf4 100644
 --- a/src/ruby_supportlib/phusion_passenger/admin_tools.rb
 +++ b/src/ruby_supportlib/phusion_passenger/admin_tools.rb
 @@ -31,7 +31,7 @@ def self.tmpdir
            return ENV[name]
          end
        end
--      return "/tmp"
+-      return Dir['/tmp/systemd-private-*-{httpd,nginx}.service-*/tmp'].first || "/tmp"
 +      return "/var/run/ea-ruby24-passenger"
      end
  
