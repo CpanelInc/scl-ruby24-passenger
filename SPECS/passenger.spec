@@ -1,5 +1,3 @@
-%define debug_package %{nil}
-
 # Defining the package namespace
 %global ns_name ea
 %global ns_dir /opt/cpanel
@@ -22,7 +20,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 1
+%define release_prefix 2
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -396,6 +394,9 @@ fi
 /opt/cpanel/ea-ruby24/src/passenger-release-%{version}/
 
 %changelog
+* Wed May 10 2023 Brian Mendoza <brian.mendoza@cpanel.net> - 6.0.12-2
+- ZC-10936: Clean up Makefile and remove debug-package-nil
+
 * Mon Jan 17 2022 Cory McIntire <cory@cpanel.net> - 6.0.12-1
 - EA-10436: Update scl-ruby24-passenger from v6.0.7 to v6.0.12
 
