@@ -23,7 +23,7 @@
 %define ruby_vendorlibdir   %(scl enable ea-ruby24 "ruby -rrbconfig -e 'puts RbConfig::CONFIG[%q|vendorlibdir|]'")
 
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4590 for more details
-%define release_prefix 1
+%define release_prefix 2
 
 %global _httpd_mmn         %(cat %{_root_includedir}/apache2/.mmn 2>/dev/null || echo missing-ea-apache24-devel)
 %global _httpd_confdir     %{_root_sysconfdir}/apache2/conf.d
@@ -33,7 +33,7 @@
 %define ea_openssl_ver 1.0.2o-2
 %define ea_libcurl_ver 7.68.0-2
 
-Summary: Phusion Passenger application server
+Summary: EOL Phusion Passenger application server
 Name: %{?scl:%scl_prefix}rubygem-passenger
 Version: 6.0.20
 Release: %{release_prefix}%{?dist}.cpanel
@@ -44,7 +44,7 @@ Group: System Environment/Daemons
 # Documentation is CC-BY-SA
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=470696#c146
 License: Boost and BSD and BSD with advertising and MIT and zlib
-URL: https://www.phusionpassenger.com
+URL: https://www.ruby-lang.org/en/news/2020/04/05/support-of-ruby-2-4-has-ended/
 
 Source: http://s3.amazonaws.com/phusion-passenger/releases/release-%{version}.tar.gz
 Source1: passenger.logrotate
@@ -110,6 +110,8 @@ Provides: bundled(boost) = %{bundled_boost_version}
 %{?filter_setup}
 
 %description
+ruby24-passenger has reached End of Life.
+
 Phusion Passenger(r) is a web server and application server, designed to be fast,
 robust and lightweight. It takes a lot of complexity out of deploying web apps,
 adds powerful enterprise-grade features that are useful in production,
@@ -117,7 +119,7 @@ and makes administration much easier and less complex. It supports Ruby,
 Python, Node.js and Meteor.
 
 %package -n %{scl_prefix}mod_passenger
-Summary: Apache Module for Phusion Passenger
+Summary: EOL Apache Module for Phusion Passenger
 Group: System Environment/Daemons
 BuildRequires:  ea-apache24-devel
 Requires: ea-apache24-mmn = %{_httpd_mmn}
@@ -128,24 +130,30 @@ Provides: apache24-passenger
 Conflicts: apache24-passenger
 
 %description -n %{scl_prefix}mod_passenger
+ruby24-passenger has reached End of Life.
+
 This package contains the pluggable Apache server module for Phusion Passenger(r).
 
 %package doc
-Summary: Phusion Passenger documentation
+Summary: EOL Phusion Passenger documentation
 Group: System Environment/Daemons
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
 License: CC-BY-SA and MIT and (MIT or GPL+)
 
 %description doc
+ruby24-passenger has reached End of Life.
+
 This package contains documentation files for Phusion Passenger(r).
 
 %package -n %{?scl:%scl_prefix}ruby-wrapper
-Summary:   Phusion Passenger application server for %{scl_prefix}
+Summary:   EOL Phusion Passenger application server for %{scl_prefix}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{?scl:%scl_prefix}ruby
 
 %description -n %{?scl:%scl_prefix}ruby-wrapper
+ruby24-passenger has reached End of Life.
+
 Phusion Passenger application server for %{scl_prefix}.
 
 %prep
@@ -397,6 +405,9 @@ fi
 /opt/cpanel/ea-ruby24/src/passenger-release-%{version}/
 
 %changelog
+* Fri Sep 27 2024 Cory McIntire <cory@cpanel.net> - 6.0.20-2
+- EA-12431: Mark scl-ruby24-passenger as EOL
+
 * Mon Mar 18 2024 Cory McIntire <cory@cpanel.net> - 6.0.20-1
 - EA-12025: Update scl-ruby24-passenger from v6.0.12 to v6.0.20
 
